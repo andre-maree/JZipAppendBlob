@@ -27,7 +27,7 @@ stringBuilder.Append(JsonConvert.SerializeObject(values));
 stringBuilder.Append(',');
 ```
 
-After the StringBuilder is populated, the JSON data can be zipped and streamed up or down like this:
+After the StringBuilder is populated, the JSON data can be compressed/uncompressed and streamed up/down like this:
 
 ```cs
 // stream up
