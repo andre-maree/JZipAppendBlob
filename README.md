@@ -17,6 +17,7 @@ object[] values = new object[dataReader.FieldCount];
 
 dataReader.GetValues(values);
 
+// or use AddStartRow(StringBuilder stringBuilder, string values)
 stringBuilder.Append('['); // only the 1st ever row gets this
 stringBuilder.Append(JsonConvert.SerializeObject(values));
 stringBuilder.Append(',');
@@ -26,6 +27,7 @@ await dataReader.ReadAsync();
 
 dataReader.GetValues(values);
 
+// or use AddBodyRow(StringBuilder stringBuilder, string values)
 stringBuilder.Append(JsonConvert.SerializeObject(values));
 stringBuilder.Append(',');
 ```
