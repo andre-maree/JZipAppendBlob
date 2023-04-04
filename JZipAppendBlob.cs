@@ -4,9 +4,9 @@ using Azure.Storage.Blobs.Specialized;
 using System.IO.Compression;
 using System.Text;
 
-namespace JZipAppendBlob
+namespace JZipBlob
 {
-    public static class JZipBlob
+    public static class JZipAppendBlob
     {
         /// <summary>
         /// Compress JSON data as a string of List<object[]> and append the blob
