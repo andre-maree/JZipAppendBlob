@@ -7,7 +7,7 @@ Stream appendable JSON data to and from Azure append blobs. GZip compression is 
 It is needed to check if the destination blob exists (or any other way to determine the 1st write to the blob). If it does not exist then the 1st data row write to the blob must start with an added [ character. After the 1st data row write the '[' character should not be added. The ',' (comma) character is always added to the end of each data row. For example, when getting data from Sql Server in C# and it is the 1st write to a blob, make sure that the data is prefixed with '[':
 
 ```cs
-// the 1st row write to a new blob, after check blob existance and create
+// the 1st row write to a new blob, after checking blob existance and creation
 await dataReader.ReadAsync();
 
 dataReader.GetValues(values);
