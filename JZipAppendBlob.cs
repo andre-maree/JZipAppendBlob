@@ -6,7 +6,7 @@ using System.Text;
 
 namespace JZipAppendBlob
 {
-    public static class JZipAppendBlob
+    public static class JZipBlob
     {
         /// <summary>
         /// Compress JSON data as a string of List<object[]> and append the blob
@@ -15,7 +15,7 @@ namespace JZipAppendBlob
         /// <param name="data"></param>
         /// <param name="encodingCode"></param>
         /// <returns></returns>
-        private static async Task AppendBlobAsync(AppendBlobClient appendBlobClient, string data, int encodingCode = 65001)
+        public static async Task CompressAndAppendBlobAsync(AppendBlobClient appendBlobClient, string data, int encodingCode = 65001)
         {
             byte[] bytes = Encoding.GetEncoding(encodingCode).GetBytes(data);
 
@@ -30,11 +30,11 @@ namespace JZipAppendBlob
         /// Decompress JSON data as a string of List<object[]> from an append blob
         /// </summary>
         /// <param name="blocClient">Azure.Storage.Blobs.BlobClient</param>
-        /// <param name="isSealed">Use true to get data from an open append blob.
+        /// <param name="isSealed">Not yet implemented - Use true to get data from an open append blob.
         /// Use false to get data from a closed or sealed append blob, else use null and a check will be done</param>
         /// <param name="encodingCode">Any valid ecoding code, 65001 = utf8; 1200 = Unicode; 12000 = utf32</param>
         /// <returns></returns>
-        private static async Task<string> DownloadBlobAsync(BlobClient blocClient, bool? isSealed = null, int encodingCode = 65001)
+        public static async Task<string> DecompressAndDownloadAppendBlobAsync(BlobClient blocClient, int encodingCode = 65001)//bool? isSealed = null)
         {
             using var memoryStream = new MemoryStream();
 
@@ -45,15 +45,15 @@ namespace JZipAppendBlob
 
             byte[] arr = memoryStream.ToArray();
 
-            if (!isSealed.HasValue)
-            {
-                throw new NotImplementedException();
-            }
+            //if (!isSealed.HasValue)
+            //{
+            //    throw new NotImplementedException();
+            //}
 
-            if (!isSealed.Value)
-            {
+            //if (!isSealed.Value)
+            //{
                 arr[^1] = (byte)']';
-            }
+            //}
 
             return Encoding.GetEncoding(encodingCode).GetString(arr);
         }
