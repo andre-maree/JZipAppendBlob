@@ -29,9 +29,11 @@ stringBuilder.Append(',');
 Use these 2 methods to help set the start row and the subsequent body rows:
 
 ```cs
-JZipAppendBlob.AddStartRow(StringBuilder sb, string values)
+// AddStartRow(StringBuilder stringBuilder, string values)
+JZipAppendBlob.AddStartRow(stringBuilder, JsonConvert.SerializeObject(values));
 
-JZipAppendBlob.AddBodyRow(StringBuilder sb, string values)
+// AddBodyRow(StringBuilder stringBuilder, string values)
+JZipAppendBlob.AddBodyRow(sb, JsonConvert.SerializeObject(values));
 ```
 
 After the StringBuilder is populated, the JSON data can be compressed/uncompressed and streamed up/down like this:
