@@ -57,5 +57,18 @@ namespace JZipBlob
 
             return Encoding.GetEncoding(encodingCode).GetString(arr);
         }
+
+        public static void AddStartRow(StringBuilder sb, string values)
+        {
+            sb.Append('[');
+            sb.Append(values);
+            sb.Append(',');
+        }
+
+        public static void AddBodyRow(StringBuilder sb, string values)
+        {
+            sb.Append(values);
+            sb.Append(',');
+        }
     }
 }
