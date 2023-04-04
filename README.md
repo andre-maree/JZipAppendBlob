@@ -37,3 +37,5 @@ await JZipAppendBlob.CompressAndAppendBlobAsync(appendBlobClient, stringBuilder.
 string decompressed = await JZipAppendBlob.DecompressAndDownloadAppendBlobAsync(blocClient);
 List<object[]> dataObject = JsonConvert.DeserializeObject<List<object[]>>(decompressed);
 ```
+
+It is possible to manually unzip the blob data with a common zipping tool. To make the JSON valid, simply replace the last ',' character with a closing ']' character.
