@@ -16,7 +16,7 @@ stringBuilder.Append('['); // only the 1st ever row gets this
 stringBuilder.Append(JsonConvert.SerializeObject(values));
 stringBuilder.Append(',');
 
-// all subsecquent rows can then leave out the prefixed [
+// all subsequent rows can then leave out the prefixed [
 await dataReader.ReadAsync();
 
 dataReader.GetValues(values);
