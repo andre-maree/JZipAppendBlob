@@ -12,6 +12,8 @@ using JZipBlob;
 // the 1st row write to a new blob, after checking blob existence and creation
 await dataReader.ReadAsync();
 
+object[] values = new object[dataReader.FieldCount];
+
 dataReader.GetValues(values);
 
 stringBuilder.Append('['); // only the 1st ever row gets this
