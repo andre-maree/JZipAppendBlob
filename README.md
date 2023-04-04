@@ -8,9 +8,9 @@ It is needed to check if the destination blob exists (or any other way to determ
 
 ```cs
 using JZipBlob;
-
+------------------------------------------------------------------------------
 // the 1st row write to a new blob, after checking blob existence and creation
-await dataReader.ReadAsync();
+await dataReader.ReadAsync(); // Sql Client DataReader
 
 object[] values = new object[dataReader.FieldCount];
 
