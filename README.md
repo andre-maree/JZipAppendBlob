@@ -1,6 +1,6 @@
 # JZipAppendBlob
 
-Stream appendable JSON data to and from Azure append blobs. GZip compression is used to minimize the size.
+Effeciently stream appendable JSON data to and from Azure append blobs. GZip compression is used to minimize the size.
 
 ```javascript
 [
@@ -14,12 +14,16 @@ It is needed to check if the destination blob exists (or any other way to determ
 
 ```cs
 using JZipBlob;
+//----------------------------------------------------------------------------
 
 // the 1st row write to a new blob, after checking blob existence and creation
-await dataReader.ReadAsync();
+await dataReader.ReadAsync(); // Sql Client DataReader
+
+object[] values = new object[dataReader.FieldCount];
 
 dataReader.GetValues(values);
 
+// or use AddStartRow(StringBuilder stringBuilder, string values)
 stringBuilder.Append('['); // only the 1st ever row gets this
 stringBuilder.Append(JsonConvert.SerializeObject(values));
 stringBuilder.Append(',');
@@ -29,6 +33,7 @@ await dataReader.ReadAsync();
 
 dataReader.GetValues(values);
 
+// or use AddBodyRow(StringBuilder stringBuilder, string values)
 stringBuilder.Append(JsonConvert.SerializeObject(values));
 stringBuilder.Append(',');
 ```
