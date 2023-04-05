@@ -10,7 +10,7 @@ Effeciently stream appendable JSON data to and from Azure append blobs. GZip com
 
 ### JZipAppendBlob JSON data format:
 
-It is needed to check if the destination blob exists (or any other way to determine the 1st write to the blob). If it does not exist then the 1st data row write to the blob must be prefixed with the '[' character. After the 1st data row write the '[' character should not be added ever again. The ',' (comma) character is always added to the end of each data row. For example, when getting data from Sql Server in C#. If it is the 1st row to write to a blob, make sure that the data is prefixed with '[':
+First it is needed to check if the destination blob exists (or any other way to determine the 1st write to the blob). If it does not exist then the 1st data row write to the blob must be prefixed with the '[' character. After the 1st data row write the '[' character should not be added ever again. The ',' (comma) character is always added to the end of each data row. For example, when getting data from Sql Server in C#. If it is the 1st row to write to a blob, make sure that the data is prefixed with '[':
 
 ```cs
 using JZipBlob;
