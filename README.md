@@ -59,3 +59,34 @@ List<object[]> dataObject = JsonConvert.DeserializeObject<List<object[]>>(decomp
 ```
 
 It is also possible to manually unzip the blob data with a common zipping tool. To make the JSON valid, simply replace the last ',' character with a closing ']' character.
+
+Full code example reading data from SQL Server:
+```cs
+BlobContainerClient cont = new("UseDevelopmentStorage=true", "mycontainername");
+AppendBlobClient appendBlobClient = client.GetAppendBlobClient("myblobname");
+
+StringBuilder stringBuilder = new();
+
+bool exists = await appendBlobClient.ExistsAsync();
+
+if (!exists)
+{
+    await appendBlobClient.CreateAsync();
+
+    await sdr.ReadAsync();
+
+    sdr.GetValues(values);
+
+    JZipAppendBlob.AddStartRow(stringBuilder, JsonConvert.SerializeObject(values));
+}
+else
+{
+    await sdr.ReadAsync();
+
+    sdr.GetValues(values);
+
+    sid = Convert.ToInt64(values[0]);
+
+    JZipAppendBlob.AddBodyRow(stringBuilder, JsonConvert.SerializeObject(values));
+}
+```

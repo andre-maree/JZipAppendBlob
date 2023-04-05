@@ -11,9 +11,9 @@ namespace JZipBlob
         /// <summary>
         /// Compress JSON data as a string of List<object[]> and append the blob
         /// </summary>
-        /// <param name="appendBlobClient"></param>
+        /// <param name="appendBlobClient">Azure.Storage.Blobs.AppendBlobClient</param>
         /// <param name="data"></param>
-        /// <param name="encodingCode"></param>
+        /// <param name="encodingCode">Any valid ecoding code, 65001 = utf8; 1200 = Unicode; 12000 = utf32</param>
         /// <returns></returns>
         public static async Task CompressAndAppendBlobAsync(AppendBlobClient appendBlobClient, string data, int encodingCode = 65001)
         {
