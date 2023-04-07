@@ -80,7 +80,7 @@ namespace JZipBlob
             //{
                 arr[^1] = (byte)']';
             //}
-
+            //var rs2 = JsonConvert.Deserialize<List<string[]>>(ss);
             return Encoding.GetEncoding(encodingCode).GetString(arr);
         }
 
