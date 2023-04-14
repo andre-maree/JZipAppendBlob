@@ -1,6 +1,6 @@
 # JZipAppendBlob
 
-Effeciently stream appendable JSON data to and from Azure append blobs. GZip compression is used to minimize the size. The data result is compatible with Azure Data Factory after a seal is done on the blob. If the blob is still appendable and not sealed, then the DecompressAndDownloadAppendBlobAsync method can be called to get a JSON data set. Just beware of the size of the blob and the memory available on the VM that receives the blob data.
+Effeciently stream appendable JSON data to and from Azure append blobs. JZipAppendBlob makes it easy to use append blobs with streaming of JSON data. This enables great scalability for large result sets because there can be a direct import from Azure Data Factory. GZip compression is used to minimize the size. The data result is compatible with Azure Data Factory after a seal is done on the blob. If the blob is still appendable and not sealed, then the DecompressAndDownloadAppendBlobAsync method can be called to get a JSON data set. Just beware of the size of the blob and the memory available on the VM that receives the blob data.
 
 ```javascript
 [
