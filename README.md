@@ -1,11 +1,11 @@
 # JZipAppendBlob
 
-Effeciently stream appendable JSON data to and from Azure append blobs. GZip compression is used to minimize the size. The data result is compatible with Azure Data Factory after a seal is done on the blob. If the blob is still appendable and not sealed, then the DecompressAndDownloadAppendBlobAsync method can be called to get a JSON data set. Just beaware of the size of the blob and the memory available on the VM that receives the blob data.
+Effeciently stream appendable JSON data to and from Azure append blobs. GZip compression is used to minimize the size. The data result is compatible with Azure Data Factory after a seal is done on the blob. If the blob is still appendable and not sealed, then the DecompressAndDownloadAppendBlobAsync method can be called to get a JSON data set. Just beware of the size of the blob and the memory available on the VM that receives the blob data.
 
 ```javascript
 [
-	["Item1": "value1", "Item2": "value2"],
-	["Item1": "value3", "Item2": "value4"],
+	{"Item1": "value1", "Item2": "value2"},
+	{"Item1": "value3", "Item2": "value4"}
 ```
 
 ### JZipAppendBlob JSON data format:
@@ -44,4 +44,8 @@ string decompressed = await JZipAppendBlob.DecompressAndDownloadAppendBlobAsync(
 List<object[]> dataObject = JsonConvert.DeserializeObject<List<object[]>>(decompressed);
 ```
 
-It is also possible to manually unzip the blob data with a common zipping tool. To make the JSON valid, simply append the blob with a closing ']' character, but this should be done by a seal operation or else postfixed to the downloaded stream.
+It is also possible to manually unzip the blob data with a common zipping tool. To make the JSON valid, simply append the blob with a closing ']' character, but this should be done by a seal operation or else postfixed to the downloaded stream. A sealed blob has zipped JSON data that can be imported to Azure Data Factory directly. Unsealed blobs are not compatible with Azure Data Factory but can be retrieved as valid JSON from JZipAppendBlob.
+
+### Sealing the blob:
+
+Append the blob data with it`s last ']' character (zipped) using the normal blob append and blob seal techniques when no more data should be written.
