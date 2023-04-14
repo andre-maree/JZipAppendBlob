@@ -1,6 +1,6 @@
 # JZipAppendBlob
 
-Effeciently stream appendable JSON data to and from Azure append blobs. GZip compression is used to minimize the size.
+Effeciently stream appendable JSON data to and from Azure append blobs. GZip compression is used to minimize the size. The data result is compatible with Azure Data Factory after a seal is done on the blob. If the blob is still appendable and not sealed, then the DecompressAndDownloadAppendBlobAsync method can be called to get a JSON data set. Just beaware of the size of the blob and the memory available on the VM that receives the blob data.
 
 ```javascript
 [
@@ -10,41 +10,27 @@ Effeciently stream appendable JSON data to and from Azure append blobs. GZip com
 
 ### JZipAppendBlob JSON data format:
 
-First it is needed to check if the destination blob exists (or any other way to determine the 1st write to the blob). If it does not exist then the 1st data row write to the blob must be prefixed with the '[' character. After the 1st data row write the '[' character should not be added ever again. The ',' (comma) character is always added to the end of each data row. For example, when getting data from Sql Server in C#. If it is the 1st row to write to a blob, make sure that the data is prefixed with '[':
+First it is needed to check if the destination blob exists (or any other way to determine the 1st write to the blob). If it does not exist then the 1st data row write to the blob must be prefixed with the '[' character. After the 1st data row write the '[' character should not be added ever again. The ',' (comma) character is always added to the start of each data row, except on the very first row write. For example, when getting data from Sql Server in C#: If it is the 1st row to write to a blob, make sure that the data is prefixed with '[':
 
 ```cs
 using JZipBlob;
 //----------------------------------------------------------------------------
 
 // the 1st row write to a new blob, after checking blob existence and creation
+JZipAppendBlob.InitialAppend(stringBuilder);
+
 await dataReader.ReadAsync(); // Sql Client DataReader
 
 object[] values = new object[dataReader.FieldCount];
 
 dataReader.GetValues(values);
 
-// or use AddStartRow(StringBuilder stringBuilder, string values)
-stringBuilder.Append('['); // only the 1st ever row gets this
-stringBuilder.Append(JsonConvert.SerializeObject(values));
-stringBuilder.Append(',');
+// use StartRow(StringBuilder stringBuilder)
 
-// all subsequent rows must leave out the prefixed [
+// all subsequent rows must be prefixed with ','
+JZipAppendBlob.StartRow(stringBuilder);
+
 await dataReader.ReadAsync();
-
-dataReader.GetValues(values);
-
-// or use AddBodyRow(StringBuilder stringBuilder, string values)
-stringBuilder.Append(JsonConvert.SerializeObject(values));
-stringBuilder.Append(',');
-```
-Use these 2 methods to help set the start row and the subsequent body rows:
-
-```cs
-// AddStartRow(StringBuilder stringBuilder, string values)
-JZipAppendBlob.AddStartRow(stringBuilder, JsonConvert.SerializeObject(values));
-
-// AddBodyRow(StringBuilder stringBuilder, string values)
-JZipAppendBlob.AddBodyRow(sb, JsonConvert.SerializeObject(values));
 ```
 
 After the StringBuilder is populated, the JSON data can be compressed/uncompressed and streamed up/down like this:
@@ -58,35 +44,4 @@ string decompressed = await JZipAppendBlob.DecompressAndDownloadAppendBlobAsync(
 List<object[]> dataObject = JsonConvert.DeserializeObject<List<object[]>>(decompressed);
 ```
 
-It is also possible to manually unzip the blob data with a common zipping tool. To make the JSON valid, simply replace the last ',' character with a closing ']' character.
-
-Full code example reading data from SQL Server:
-```cs
-BlobContainerClient cont = new("UseDevelopmentStorage=true", "mycontainername");
-AppendBlobClient appendBlobClient = client.GetAppendBlobClient("myblobname");
-
-StringBuilder stringBuilder = new();
-
-bool exists = await appendBlobClient.ExistsAsync();
-
-if (!exists)
-{
-    await appendBlobClient.CreateAsync();
-
-    await sdr.ReadAsync();
-
-    sdr.GetValues(values);
-
-    JZipAppendBlob.AddStartRow(stringBuilder, JsonConvert.SerializeObject(values));
-}
-else
-{
-    await sdr.ReadAsync();
-
-    sdr.GetValues(values);
-
-    sid = Convert.ToInt64(values[0]);
-
-    JZipAppendBlob.AddBodyRow(stringBuilder, JsonConvert.SerializeObject(values));
-}
-```
+It is also possible to manually unzip the blob data with a common zipping tool. To make the JSON valid, simply append the blob with a closing ']' character, but this should be done by a seal operation or else postfixed to the downloaded stream.
