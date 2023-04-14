@@ -2,8 +2,6 @@
 using Azure.Storage.Blobs.Models;
 using Azure.Storage.Blobs.Specialized;
 using System.IO.Compression;
-using System.Runtime.InteropServices.ObjectiveC;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 
 namespace JZipBlob
@@ -27,30 +25,6 @@ namespace JZipBlob
 
             await gzipStream.WriteAsync(bytes);
         }
-
-        //public static T FromByteArray<T>(byte[] data)
-        //{
-        //    if (data == null)
-        //        return default(T);
-        //    BinaryFormatter bf = new BinaryFormatter();
-        //    using (MemoryStream ms = new MemoryStream(data))
-        //    {
-        //        object obj = bf.Deserialize(ms);
-        //        return (T)obj;
-        //    }
-        //}
-
-        //public byte[] ToByteArray<T>(T obj)
-        //{
-        //    if (obj == null)
-        //        return null;
-        //    BinaryFormatter bf = new BinaryFormatter();
-        //    using (MemoryStream ms = new MemoryStream())
-        //    {
-        //        bf.Serialize(ms, obj);
-        //        return ms.ToArray();
-        //    }
-        //}
 
         /// <summary>
         /// Decompress JSON data as a string of List<object[]> from an append blob
