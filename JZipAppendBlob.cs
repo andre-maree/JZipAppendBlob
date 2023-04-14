@@ -69,6 +69,8 @@ namespace JZipBlob
                 await decompressStream.CopyToAsync(memoryStream);
             }
 
+            memoryStream.WriteByte((byte)']');
+
             byte[] arr = memoryStream.ToArray();
 
                 //if (!isSealed.HasValue)
@@ -78,22 +80,19 @@ namespace JZipBlob
 
             //if (!isSealed.Value)
             //{
-                arr[^1] = (byte)']';
+                //arr[^1] = (byte)']';
             //}
-            //var rs2 = JsonConvert.Deserialize<List<string[]>>(ss);
+           
             return Encoding.GetEncoding(encodingCode).GetString(arr);
         }
 
-        public static void AddStartRow(StringBuilder sb, string values)
+        public static void InitialAppend(StringBuilder sb)
         {
             sb.Append('[');
-            sb.Append(values);
-            sb.Append(',');
         }
 
-        public static void AddBodyRow(StringBuilder sb, string values)
+        public static void StartRow(StringBuilder sb)
         {
-            sb.Append(values);
             sb.Append(',');
         }
     }
